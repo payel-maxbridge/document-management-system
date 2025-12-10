@@ -1,28 +1,49 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-</head>
+@extends('layouts.app')
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+@endpush
 <body>
 
-<h2>Login</h2>
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="card shadow p-4" style="width: 400px;">
 
-@if ($errors->any())
-    <p style="color:red">{{ $errors->first() }}</p>
-@endif
+        <h3 class="text-center mb-4">Login</h3>
 
-<form method="POST" action="{{ route('login') }}">
-    @csrf
-    <label>Email</label>
-    <input type="email" name="email" required>
+        @if ($errors->any())
+            <div class="alert alert-danger py-2">
+                {{ $errors->first() }}
+            </div>
+        @endif
 
-    <label>Password</label>
-    <input type="password" name="password" required>
+        @if (session('success'))
+            <div class="alert alert-success py-2">
+                {{ session('success') }}
+            </div>
+        @endif
 
-    <button type="submit">Login</button>
-</form>
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
 
-<p>Don't have an account? <a href="{{ route('register') }}">Register</a></p>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+
+        <p class="text-center mt-3">
+            Don't have an account?
+            <a href="{{ route('register') }}">Register</a>
+        </p>
+
+    </div>
+</div>
 
 </body>
-</html>
+

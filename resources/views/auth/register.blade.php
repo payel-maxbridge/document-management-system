@@ -1,34 +1,55 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Register</title>
-</head>
+
+@extends('layouts.app')
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+@endpush
 <body>
 
-<h2>Create Account</h2>
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="card shadow p-4" style="width: 400px;">
 
-@if ($errors->any())
-    <p style="color:red">{{ $errors->first() }}</p>
-@endif
+        <h3 class="text-center mb-4">Create Account</h3>
 
-<form method="POST" action="{{ route('register') }}">
-    @csrf
-    <label>Name</label>
-    <input type="text" name="name" required>
+        @if ($errors->any())
+            <div class="alert alert-danger py-2">
+                {{ $errors->first() }}
+            </div>
+        @endif
 
-    <label>Email</label>
-    <input type="email" name="email" required>
+        <form method="POST" action="{{ route('register') }}">
+            @csrf
 
-    <label>Password</label>
-    <input type="password" name="password" required>
+            <div class="mb-3">
+                <label class="form-label">Name</label>
+                <input type="text" name="name" class="form-control" required>
+            </div>
 
-    <label>Confirm Password</label>
-    <input type="password" name="password_confirmation" required>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
 
-    <button type="submit">Register</button>
-</form>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
 
-<p>Already registered? <a href="{{ route('login') }}">Login</a></p>
+            <div class="mb-3">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" name="password_confirmation" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+        </form>
+
+        <p class="text-center mt-3">
+            Already registered?
+            <a href="{{ route('login') }}">Login</a>
+        </p>
+
+    </div>
+</div>
 
 </body>
-</html>
+
+
