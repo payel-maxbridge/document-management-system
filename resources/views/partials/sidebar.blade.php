@@ -38,7 +38,7 @@
         <li><a href="{{ route('document-lifecycle')}}" class="{{ request()->routeIs('document-lifecycle') ? 'active' : ''}}">
             <i class="bi bi-diagram-2"></i> Document Lifecycle</a>
         </li>
-        <li><a href="{{ route('index') }}" style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px;">
+        <li><a href="{{ route('logout') }}" style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px;">
             <i class="bi bi-box-arrow-right"></i> Logout</a>
         </li>
         
