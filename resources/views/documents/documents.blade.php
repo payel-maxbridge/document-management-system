@@ -461,7 +461,7 @@
             <li><a href="user-hierarchy"><i class="bi bi-diagram-3"></i> User Hierarchy</a></li>
             <li><a href="flow-configuration"><i class="bi bi-gear"></i> Flow Configuration</a></li>
             <li><a href="permissions"><i class="bi bi-shield-lock"></i> Permissions</a></li>
-            <li><a href="configuration"  class="active"><i class="bi bi-sliders"></i> Configuration</a></li>
+            <li><a href="configuration"><i class="bi bi-sliders"></i> Configuration</a></li>
             <li><a href="document-explorer"><i class="bi bi-folder"></i> Document Explorer</a></li>
             <li><a href="audit-trail"><i class="bi bi-clock-history"></i> Audit Trail</a></li>
             <li><a href="document-lifecycle"><i class="bi bi-diagram-2"></i> Document Lifecycle</a></li>

@@ -1,44 +1,36 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\{HomeController, DashboardController, DocumentController, ApprovalController, UserManagementController,
+SystemConfigController};
 
 // Route::get('/', function () {
 //     return view('welcome');
 // });
 
-Route::get('/', function () {
-    return view('index');
-});
-Route::get('/dashboard', function () {
-    return view('dashboard');
-});
-Route::get('/documents', function () {
-    return view('documents');
-});
-Route::get('/upload', function () {
-    return view('upload');
-});
-Route::get('/approvals', function () {
-    return view('approvals');
-});
-Route::get('/user-hierarchy', function () {
-    return view('user-hierarchy');
-});
-Route::get('/flow-configuration', function () {
-    return view('flow-configuration');
-});
-Route::get('/permissions', function () {
-    return view('permissions');
-});
-Route::get('/configuration', function () {
-    return view('configuration');
-});
-Route::get('/document-explorer', function () {
-    return view('document-explorer');
-});
-Route::get('/audit-trail', function () {
-    return view('audit-trail');
-});
-Route::get('/document-lifecycle', function () {
-    return view('document-lifecycle');
-});
+//Home page
+Route::get('/index', [HomeController::class, 'index'])->name('index');
+
+//dashboard page
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+//documents
+Route::get('/documents', [DocumentController::class, 'docList'])->name('documents');
+Route::get('/upload', [DocumentController::class, 'upload'])->name('upload');
+Route::get('/document-explorer', [DocumentController::class, 'docExplorer'])->name('document-explorer');
+Route::get('/document-explorer/document-view', [DocumentController::class, 'docView'])->name('document-view');
+Route::get('/document-lifecycle', [DocumentController::class, 'docLifecycle'])->name('document-lifecycle');
+
+//approvals
+Route::get('/approvals', [ApprovalController::class, 'approvalList'])->name('approvals');
+
+//user management
+Route::get('/user-hierarchy', [UserManagementController::class, 'hierarchy'])->name('user-hierarchy');
+Route::get('/permissions', [UserManagementController::class, 'permissions'])->name('permissions');
+
+//system-configuration
+Route::get('/flow-configuration', [SystemConfigController::class, 'flowConfig'])->name('flow-configuration');
+Route::get('/configuration', [SystemConfigController::class, 'configuration'])->name('configuration');
+Route::get('/audit-trail', [SystemConfigController::class, 'audit'])->name('audit-trail');
+
+

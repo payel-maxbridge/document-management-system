@@ -391,17 +391,7 @@
             <h5><i class="bi bi-file-earmark-text"></i> DMS</h5>
             <p>Document Management</p>
         </div>
-        <!-- <ul class="sidebar-menu">
-            <li><a href="dashboard.html"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
-            <li><a href="documents.html"><i class="bi bi-file-earmark"></i> Documents</a></li>
-            <li><a href="upload.html"><i class="bi bi-cloud-upload"></i> Upload Document</a></li>
-            <li><a href="approvals.html" class="active"><i class="bi bi-check-circle"></i> Approvals</a></li>
-            <li><a href="user-hierarchy.html"><i class="bi bi-diagram-3"></i> User Hierarchy</a></li>
-            <li><a href="flow-configuration.html"><i class="bi bi-gear"></i> Flow Configuration</a></li>
-            <li><a href="permissions.html"><i class="bi bi-shield-lock"></i> Permissions</a></li>
-            <li><a href="configuration.html"><i class="bi bi-sliders"></i> Configuration</a></li>
-            <li><a href="index.html" style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px;"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
-        </ul> -->
+     
         <ul class="sidebar-menu">
             <li><a href="dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
             <li><a href="documents"><i class="bi bi-file-earmark"></i> Documents</a></li>
