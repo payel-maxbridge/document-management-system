@@ -9,13 +9,15 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-//Authentication/register
-Route::get('/register', [RegisterController::class, 'showRegister'])->name('showRegister');
-Route::post('/register', [RegisterController::class, 'register'])->name('register');
+Route::middleware('guest')->group(function (){
+    //Authentication/register
+    Route::get('/register', [RegisterController::class, 'showRegister'])->name('showRegister');
+    Route::post('/register', [RegisterController::class, 'register'])->name('register');
 
-//Authentication/login
-Route::get('/login', [LoginController::class, 'showLogin'])->name('showLogin');
-Route::post('/login', [LoginController::class, 'login'])->name('login');
+    //Authentication/login
+    Route::get('/login', [LoginController::class, 'showLogin'])->name('showLogin');
+    Route::post('/login', [LoginController::class, 'login'])->name('login');
+});
 
 //Authentication/logout
 Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
