@@ -8,9 +8,6 @@
             --info-color: #0dcaf0;
             --light-color: #f8f9fa;
             --dark-color: #212529;
-            --green-recent: #28a745;
-            --amber-old: #ffc107;
-            --red-very-old: #dc3545;
         }
 
         * {
@@ -149,6 +146,7 @@
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
+            margin-bottom: 20px;
         }
 
         .card:hover {
@@ -166,28 +164,38 @@
             padding: 20px;
         }
 
-        /* Status Badges */
-        .status-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
+        /* Form Elements */
+        .form-label {
             font-weight: 600;
+            color: #212529;
+            margin-bottom: 8px;
+            display: block;
         }
 
-        .status-recent {
-            background-color: #d4edda;
-            color: #155724;
+        .form-control {
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 10px 15px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            width: 100%;
         }
 
-        .status-amber {
-            background-color: #fff3cd;
-            color: #856404;
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+            outline: none;
         }
 
-        .status-red {
-            background-color: #f8d7da;
-            color: #721c24;
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-text {
+            display: block;
+            margin-top: 5px;
+            font-size: 12px;
+            color: #6c757d;
         }
 
         /* Buttons */
@@ -198,12 +206,17 @@
             padding: 10px 20px;
             font-weight: 600;
             transition: all 0.3s ease;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
         }
 
         .btn-primary:hover {
             background-color: #0b5ed7;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+            color: white;
         }
 
         .btn-secondary {
@@ -212,227 +225,94 @@
             border-radius: 6px;
             padding: 10px 20px;
             font-weight: 600;
-        }
-
-        .btn-outline {
-            border: 2px solid #0d6efd;
-            background-color: transparent;
-            color: #0d6efd;
-            border-radius: 6px;
-            padding: 8px 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-outline:hover {
-            background-color: #0d6efd;
             color: white;
-        }
-
-        /* Tables */
-        .table-responsive {
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .table {
-            margin-bottom: 0;
-        }
-
-        .table thead {
-            background-color: #f8f9fa;
-            border-bottom: 2px solid #dee2e6;
-        }
-
-        .table th {
-            font-weight: 600;
-            color: #212529;
-            padding: 15px;
-            border: none;
-        }
-
-        .table td {
-            padding: 15px;
-            vertical-align: middle;
-            border-color: #dee2e6;
-        }
-
-        .table tbody tr {
-            transition: all 0.3s ease;
-        }
-
-        .table tbody tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        /* Forms */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            font-weight: 600;
-            color: #212529;
-            margin-bottom: 8px;
-        }
-
-        .form-control {
-            border: 1px solid #dee2e6;
-            border-radius: 6px;
-            padding: 10px 15px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            border-color: #0d6efd;
-            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
-        }
-
-        /* Modal */
-        .modal-content {
-            border: none;
-            border-radius: 8px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal-header {
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #dee2e6;
-            border-radius: 8px 8px 0 0;
-        }
-
-        .modal-title {
-            font-weight: 700;
-            color: #212529;
-        }
-
-        /* Dashboard Stats */
-        .stat-card {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-            transform: translateY(-4px);
-        }
-
-        .stat-number {
-            font-size: 36px;
-            font-weight: 700;
-            color: #0d6efd;
-            margin: 10px 0;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            color: #6c757d;
-            font-weight: 600;
-        }
-
-        .stat-icon {
-            font-size: 32px;
-            color: #0d6efd;
-            margin-bottom: 10px;
-        }
-
-        /* Document Card */
-        .document-card {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border-left: 4px solid #0d6efd;
-            transition: all 0.3s ease;
-        }
-
-        .document-card:hover {
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-            transform: translateX(4px);
-        }
-
-        .document-card.pending-approval {
-            border-left-color: #ffc107;
-        }
-
-        .document-card.approved {
-            border-left-color: #28a745;
-        }
-
-        .document-card.rejected {
-            border-left-color: #dc3545;
-        }
-
-        .document-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #212529;
-            margin-bottom: 8px;
-        }
-
-        .document-meta {
-            font-size: 13px;
-            color: #6c757d;
-            margin-bottom: 10px;
-        }
-
-        .document-tags {
-            margin-top: 10px;
-        }
-
-        .tag {
+            text-decoration: none;
             display: inline-block;
-            background-color: #e7f3ff;
-            color: #0d6efd;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            margin-right: 5px;
-            margin-bottom: 5px;
+            cursor: pointer;
         }
 
-        /* Filter Section */
-        .filter-section {
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        /* File Type List */
+        .file-type-item {
             background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-
-        .filter-group {
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 10px;
             display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            align-items: flex-end;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .filter-item {
-            flex: 1;
-            min-width: 200px;
+        .file-type-item-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .filter-item label {
+        .file-type-icon {
+            font-size: 24px;
+            color: #0d6efd;
+        }
+
+        .file-type-details h6 {
+            margin: 0;
             font-weight: 600;
-            margin-bottom: 8px;
-            display: block;
             color: #212529;
         }
 
-        .filter-item input,
-        .filter-item select {
-            width: 100%;
-            padding: 10px 15px;
-            border: 1px solid #dee2e6;
-            border-radius: 6px;
-            font-size: 14px;
+        .file-type-details p {
+            margin: 5px 0 0 0;
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.3s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #0d6efd;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
         }
 
         /* Responsive */
@@ -456,12 +336,9 @@
                 align-items: flex-start;
             }
 
-            .filter-group {
+            .file-type-item {
                 flex-direction: column;
-            }
-
-            .filter-item {
-                width: 100%;
+                align-items: flex-start;
             }
         }
 
@@ -478,13 +355,5 @@
             .page-title h1 {
                 font-size: 20px;
             }
-
-            .stat-card {
-                padding: 15px;
-            }
-
-            .stat-number {
-                font-size: 28px;
-            }
         }
-    
+ 

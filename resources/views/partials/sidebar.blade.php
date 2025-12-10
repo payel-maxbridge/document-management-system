@@ -32,7 +32,7 @@
         <li><a href="{{ route('document-explorer')}}" class="{{ request()->routeIs('document-explorer') ? 'active' : ''}}">
             <i class="bi bi-folder"></i> Document Explorer</a>
         </li>
-        <li><a href="{{ route('document-explorer')}}" class="{{ request()->routeIs('document-explorer') ? 'active' : ''}}">
+        <li><a href="{{ route('audit-trail')}}" class="{{ request()->routeIs('audit-trail') ? 'active' : ''}}">
             <i class="bi bi-clock-history"></i> Audit Trail</a>
         </li>
         <li><a href="{{ route('document-lifecycle')}}" class="{{ request()->routeIs('document-lifecycle') ? 'active' : ''}}">
