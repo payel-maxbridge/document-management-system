@@ -24,11 +24,10 @@ Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 
 Route::middleware('auth')->group(function (){
-    //Home page
-    Route::get('/index', [HomeController::class, 'index'])->name('index');
-
     //dashboard page
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/index', [HomeController::class, 'index'])->name('index');
 
     //documents
     Route::get('/documents', [DocumentController::class, 'docList'])->name('documents');
