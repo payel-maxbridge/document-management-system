@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function (){
 
     //documents
     Route::get('/documents', [DocumentController::class, 'docList'])->name('documents');
-    Route::get('/upload', [DocumentController::class, 'upload'])->name('upload');
+    Route::get('/upload-document', [DocumentController::class, 'upload'])->name('upload');
     Route::get('/document-explorer', [DocumentController::class, 'docExplorer'])->name('document-explorer');
     Route::get('/document-explorer/document-view', [DocumentController::class, 'docView'])->name('document-view');
     Route::get('/document-lifecycle', [DocumentController::class, 'docLifecycle'])->name('document-lifecycle');
@@ -45,7 +45,8 @@ Route::middleware('auth')->group(function (){
 
     //system-configuration
     Route::get('/flow-configuration', [SystemConfigController::class, 'flowConfig'])->name('flow-configuration');
-    Route::get('/configuration', [SystemConfigController::class, 'configuration'])->name('configuration');
+    Route::get('/configuration', [SystemConfigController::class, 'index'])->name('configuration');
+    Route::post('/configuration', [SystemConfigController::class, 'saveConfiguration'])->name('configuration');
     Route::get('/audit-trail', [SystemConfigController::class, 'audit'])->name('audit-trail');
 });
 
