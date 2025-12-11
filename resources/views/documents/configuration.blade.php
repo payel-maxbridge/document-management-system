@@ -23,22 +23,23 @@
                 <h5 style="margin: 0;"><i class="bi bi-cloud-upload"></i> File Upload Settings</h5>
             </div>
             <div class="card-body">
-                <form id="uploadSettingsForm">
+                <form id="uploadSettingsForm" method="post" action="{{ route('configuration.upload.save')}}">
+                    @csrf
                     <div class="form-group">
                         <label for="maxFileSize" class="form-label">Maximum File Size (MB) <span style="color: #dc3545;">*</span></label>
-                        <input type="number" class="form-control" id="maxFileSize" value="50" min="1" max="1000" required>
+                        <input type="number" name="max_file_size" class="form-control" id="maxFileSize" value="{{ $data->max_file_size }}" min="1" max="1000" required>
                         <span class="form-text">Maximum size for a single file upload</span>
                     </div>
 
                     <div class="form-group">
                         <label for="maxTotalSize" class="form-label">Maximum Total Size per Document (MB) <span style="color: #dc3545;">*</span></label>
-                        <input type="number" class="form-control" id="maxTotalSize" value="500" min="1" max="5000" required>
+                        <input type="number" class="form-control" name="max_total_size" id="maxTotalSize" value="{{ $data->max_total_size }}" min="1" max="5000" required>
                         <span class="form-text">Maximum total size for all files in a single document upload</span>
                     </div>
 
                     <div class="form-group">
                         <label for="maxFiles" class="form-label">Maximum Number of Files per Document <span style="color: #dc3545;">*</span></label>
-                        <input type="number" class="form-control" id="maxFiles" value="10" min="1" max="100" required>
+                        <input type="number" name="max_no_files" class="form-control" id="maxFiles" value="{{$data->max_no_files}}" min="1" max="100" required>
                         <span class="form-text">Maximum number of files that can be uploaded in a single document</span>
                     </div>
 
@@ -46,7 +47,8 @@
                         <label class="form-label">Virus Scanning <span style="color: #dc3545;">*</span></label>
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <label class="toggle-switch">
-                                <input type="checkbox" checked>
+                                <!-- <input type="checkbox" checked> -->
+                                <input type="checkbox" name="virus_scanning" {{ $data->virus_scanning ? 'checked' : '' }}>
                                 <span class="toggle-slider"></span>
                             </label>
                             <span>Enable virus scanning for uploaded files</span>
@@ -178,10 +180,11 @@
                 <h5 style="margin: 0;"><i class="bi bi-gear"></i> System Settings</h5>
             </div>
             <div class="card-body">
-                <form id="systemSettingsForm">
+                <form id="systemSettingsForm" method="post" action="{{ route('configuration.system.save')}}">
+                    @csrf
                     <div class="form-group">
                         <label for="appName" class="form-label">Application Name</label>
-                        <input type="text" class="form-control" id="appName" value="Document Management System">
+                        <input type="text" class="form-control" name="app_name" id="appName" value="{{$data->app_name}}">
                     </div>
 
                     <div class="form-group">
@@ -191,7 +194,7 @@
 
                     <div class="form-group">
                         <label for="supportEmail" class="form-label">Support Email</label>
-                        <input type="email" class="form-control" id="supportEmail" value="support@example.com">
+                        <input type="email" class="form-control" name="support_email" id="supportEmail" value="{{$data->support_email}}">
                     </div>
 
                     <div class="form-group">
@@ -218,7 +221,7 @@
 
                     <div class="form-group">
                         <label for="retentionDays" class="form-label">Document Retention Period (Days)</label>
-                        <input type="number" class="form-control" id="retentionDays" value="365" min="30" max="3650">
+                        <input type="number" class="form-control" id="retentionDays" value="{{$data->retention_days}}" min="30" max="3650">
                         <span class="form-text">Number of days to retain archived documents</span>
                     </div>
 
@@ -231,15 +234,15 @@
         </div>
   
     <script>
-        document.getElementById('uploadSettingsForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Upload settings saved successfully! (This is a prototype)');
-        });
+        // document.getElementById('uploadSettingsForm').addEventListener('submit', function(e) {
+        //     e.preventDefault();
+        //     alert('Upload settings saved successfully! (This is a prototype)');
+        // });
 
-        document.getElementById('systemSettingsForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('System settings saved successfully! (This is a prototype)');
-        });
+        // document.getElementById('systemSettingsForm').addEventListener('submit', function(e) {
+        //     e.preventDefault();
+        //     alert('System settings saved successfully! (This is a prototype)');
+        // });
 
         function saveFileTypes() {
             alert('File type settings saved successfully! (This is a prototype)');
