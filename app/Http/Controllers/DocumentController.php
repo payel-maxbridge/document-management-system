@@ -79,7 +79,8 @@ class DocumentController extends Controller
     }
 
     public function upload(){
-        return view ('documents.upload');
+        $data = Configuration::first();
+        return view ('documents.upload', compact('data'));
     }
 
     public function docExplorer(){

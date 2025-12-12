@@ -123,9 +123,9 @@
                     <div class="card-body">
                         <h6 style="margin-bottom: 15px; font-weight: 600;">File Requirements</h6>
                         <ul style="margin-bottom: 20px; padding-left: 20px;">
-                            <li>Maximum file size: 50 MB</li>
-                            <li>Supported formats: PDF, DOCX, XLSX, PPT, TXT, JPG, PNG</li>
-                            <li>Multiple files can be uploaded at once</li>
+                            <li>Maximum file size: {{ $data->max_file_size}} MB</li>
+                            <li>Supported formats: {{ strtoupper(implode(', ', $data->allowed_file_type ?? [])) }}</li>
+                            <li>{{ $data->max_no_files}} files can be uploaded at once</li>
                         </ul>
 
                         <h6 style="margin-bottom: 15px; font-weight: 600;">Best Practices</h6>
