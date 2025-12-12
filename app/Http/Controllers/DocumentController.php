@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Configuration;
+use App\Models\{Configuration, FileConfiguration};
 
 class DocumentController extends Controller
 {
@@ -16,7 +16,8 @@ class DocumentController extends Controller
 
     public function index(){
         $data = Configuration::first();
-        return view('documents.configuration', compact('data'));
+        $fileType = FileConfiguration::fileType();
+        return view('documents.configuration', compact('data', 'fileType'));
     }
 
     //configuration/ save file upload setting
@@ -66,13 +67,13 @@ class DocumentController extends Controller
 
     public function saveFileTypes(Request $request){
         $request->validate([
-            'allowed_file_type' => 'required|array'
+            'allowed_file_type' => 'array'
         ]);
 
-        $fileType = Configuration::first();
-
-        $fileType->allowed_file_type    = $request->allowed_file_type;
-        $fileType->save();
+        Configuration::first()->update(
+            ['allowed_file_type' => $request->allowed_file_type]
+        );
+        
 
         return response()->json(['status' => 'success']);
     }

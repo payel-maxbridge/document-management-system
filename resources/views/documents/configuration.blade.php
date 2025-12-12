@@ -74,120 +74,36 @@
         <div class="card-header">
             <h5 style="margin: 0;"><i class="bi bi-file-type-pdf"></i> Allowed File Types</h5>
         </div>
+
         <div class="card-body">
-            <form id="fileTypeForm" method="post" action="{{ route('configuration.file.save')}}">
-                @csrf
+            @foreach($fileType as $file)
                 <div class="file-type-item">
                     <div class="file-type-item-info">
-                        <div class="file-type-icon"><i class="bi bi-file-pdf"></i></div>
+                        <div class="file-type-icon"><i class="{{ $file['icon'] }}"></i></div>
                         <div class="file-type-details">
-                            <h6>PDF</h6>
-                            <p>Portable Document Format</p>
+                            <h6>{{ $file['label'] }}</h6>
+                            <p>{{ $file['description'] ?? '' }}</p>
                         </div>
                     </div>
+
                     <label class="toggle-switch">
-                        <input type="checkbox" name="allowed_file_type[]" 
-                            value="pdf" {{ in_array('pdf', $data->allowed_file_type ?? []) ? 'checked' : ''}}>
+                        <input type="checkbox" class="file-checkbox"
+                            value="{{ $file['id'] }}"
+                            {{ in_array($file['id'], $data->allowed_file_type ?? []) ? 'checked' : '' }}>
                         <span class="toggle-slider"></span>
                     </label>
                 </div>
+            @endforeach
 
-                <div class="file-type-item">
-                    <div class="file-type-item-info">
-                        <div class="file-type-icon"><i class="bi bi-file-word"></i></div>
-                        <div class="file-type-details">
-                            <h6>DOCX</h6>
-                            <p>Microsoft Word Document</p>
-                        </div>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" name="allowed_file_type[]"
-                            value="docx" {{in_array('docx', $data->allowed_file_type ?? []) ? 'checked' : ''}}>
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-
-                <div class="file-type-item">
-                    <div class="file-type-item-info">
-                        <div class="file-type-icon"><i class="bi bi-file-excel"></i></div>
-                        <div class="file-type-details">
-                            <h6>XLSX</h6>
-                            <p>Microsoft Excel Spreadsheet</p>
-                        </div>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" name="allowed_file_type"
-                        value="xlsx" {{in_array('xlsx', $data->allowed_file_type ?? []) ? 'checked' : ''}}>
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-
-                <div class="file-type-item">
-                    <div class="file-type-item-info">
-                        <div class="file-type-icon"><i class="bi bi-file-ppt"></i></div>
-                        <div class="file-type-details">
-                            <h6>PPTX</h6>
-                            <p>Microsoft PowerPoint Presentation</p>
-                        </div>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" name="allowed_file_type"
-                        value="pptx" {{in_array('pptx', $data->allowed_file_type ?? []) ? 'checked' : ''}}>
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-
-                <div class="file-type-item">
-                    <div class="file-type-item-info">
-                        <div class="file-type-icon"><i class="bi bi-file-text"></i></div>
-                        <div class="file-type-details">
-                            <h6>TXT</h6>
-                            <p>Plain Text File</p>
-                        </div>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" name="allowed_file_type"
-                        value="txt" {{in_array('txt', $data->allowed_file_type ?? []) ? 'checked' : ''}}>
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-
-                <div class="file-type-item">
-                    <div class="file-type-item-info">
-                        <div class="file-type-icon"><i class="bi bi-file-image"></i></div>
-                        <div class="file-type-details">
-                            <h6>JPG/PNG</h6>
-                            <p>Image Files</p>
-                        </div>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" name="allowed_file_type"
-                        value="jpg" {{in_array('jpg', $data->allowed_file_type ?? []) ? 'checked' : ''}}>
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-
-                <div class="file-type-item">
-                    <div class="file-type-item-info">
-                        <div class="file-type-icon"><i class="bi bi-file-zip"></i></div>
-                        <div class="file-type-details">
-                            <h6>ZIP</h6>
-                            <p>Compressed Archive</p>
-                        </div>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" name="allowed_file_type"
-                        value="zip" {{in_array('zip', $data->allowed_file_type ?? []) ? 'checked' : ''}}>
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-
-                <div style="margin-top: 20px;">
-                    <button class="btn-primary" onclick="saveFileTypes()"><i class="bi bi-check"></i> Save File Type Settings</button>
-                </div>
-            </form>
+            <div class="mt-4">
+                <button class="btn btn-primary" onclick="saveFileTypes(this)">
+                    <span class="btn-text"><i class="bi bi-check"></i> Save File Types</span>
+                    <span class="loader d-none ms-2"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...</span>
+                </button>
+            </div>
         </div>
     </div>
+
 
     <!-- System Settings -->
     <div class="card">
@@ -311,7 +227,7 @@
                     type: "POST",
                     data: $(this).serialize(),
                     headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}" //security
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     },
                     success: function(response){
                         toastr.success("System setting saved successfully");
@@ -336,11 +252,42 @@
             });
            
         });
+        function saveFileTypes(button) {
+            // Disable button + show loader
+            $(button).prop('disabled', true);
+            $(button).find('.btn-text').addClass('d-none');
+            $(button).find('.loader').removeClass('d-none');
 
+            let selected = [];
+            $('.file-checkbox:checked').each(function(){
+                selected.push($(this).val());
+            });
 
-        function saveFileTypes() {
-            alert('File type settings saved successfully! (This is a prototype)');
+            $.ajax({
+                url: "{{ route('configuration.file.save') }}",
+                type: "POST",
+                data: {
+                    allowed_file_type: selected
+                },
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                success: function(){
+                    toastr.success("File types saved successfully");
+                    // Restore button
+                    $(button).prop('disabled', false);
+                    $(button).find('.btn-text').removeClass('d-none');
+                    $(button).find('.loader').addClass('d-none');
+                },
+                error: function(){
+                    toastr.error("Something went wrong, please try again");
+                    $(button).prop('disabled', false);
+                    $(button).find('.btn-text').removeClass('d-none');
+                    $(button).find('.loader').addClass('d-none');
+                }
+            });
         }
+
     </script>
     @endpush
 @endsection
