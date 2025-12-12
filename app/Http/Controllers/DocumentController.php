@@ -12,12 +12,14 @@ class DocumentController extends Controller
         return view ('documents.documents');
     }
 
+    //Configuration page
+
     public function index(){
         $data = Configuration::first();
         return view('documents.configuration', compact('data'));
     }
 
-
+    //configuration/ save file upload setting
     public function saveUploadSetting(Request $request) {
         // Validate input
         $request->validate([
@@ -27,34 +29,53 @@ class DocumentController extends Controller
             'virus_scanning'  => 'nullable',
         ]);
 
-        $settings = Configuration::first();  
+        $uploadsettings = Configuration::first();  
 
-        $settings->max_file_size  = $request->max_file_size;
-        $settings->max_total_size = $request->max_total_size;
-        $settings->max_no_files   = $request->max_no_files;
-        $settings->virus_scanning = $request->has('virus_scanning') ? 1 : 0;
+        $uploadsettings->max_file_size  = $request->max_file_size;
+        $uploadsettings->max_total_size = $request->max_total_size;
+        $uploadsettings->max_no_files   = $request->max_no_files;
+        $uploadsettings->virus_scanning = $request->has('virus_scanning') ? 1 : 0;
 
-        $settings->save();
+        $uploadsettings->save();
 
-        return back()->with('success', 'Upload settings saved!');
+        return response()->json(['status' => 'success']);
     }   
 
+    //configuration/ save system setting
+    public function saveSystemSetting(Request $request){
+       $request->validate([
+            'app_name' => 'required|string',
+            'support_email'         => 'required|string',
+            'email_notification'    => 'nullable',
+            'document_versioning'   => 'nullable',
+            'retention_days'        => 'nullable',
+       ]);
 
-    public function saveSystemSettings(Request $request){
-        Configuration::updateOrCreate(
-            ['id' => 1],
-            [
-                'app_name'            => $request->app_name,
-                'support_email'       => $request->support_email,
-                'email_notification'  => $request->has('email_notification'),
-                'document_versioning' => $request->has('document_versioning'),
-                'retention_days'      => $request->retention_days,
-            ]
-        );
+       $systemsetting = Configuration::first();
 
-        return back()->with('success', 'System settings updated successfully');
+       $systemsetting->app_name         = $request->app_name;
+       $systemsetting->support_email    = $request->support_email;
+       $systemsetting->email_notification   = $request->has('email_notification') ? 1 : 0;
+       $systemsetting->document_versioning  = $request->has('document_versioning') ? 1 : 0;
+       $systemsetting->retention_days   = $request->retention_days;
+
+       $systemsetting->save();
+
+       return response()->json(['status' => 'success']);
     }
 
+    public function saveFileTypes(Request $request){
+        $request->validate([
+            'allowed_file_type' => 'required|array'
+        ]);
+
+        $fileType = Configuration::first();
+
+        $fileType->allowed_file_type    = $request->allowed_file_type;
+        $fileType->save();
+
+        return response()->json(['status' => 'success']);
+    }
 
     public function upload(){
         return view ('documents.upload');
