@@ -46,7 +46,12 @@ class User extends Authenticatable
         ];
     }
 
+    public function configurations() {
+        return $this->hasMany(Configuration::class);
+    }
+    
     public function uploadDocuments() {
         return $this->hasMany(UploadDocument::class);
     }
+
 }

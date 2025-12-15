@@ -19,4 +19,8 @@ class Configuration extends Model
         'email_notification'    => 'boolean',
         'document_versioning'   => 'boolean',
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

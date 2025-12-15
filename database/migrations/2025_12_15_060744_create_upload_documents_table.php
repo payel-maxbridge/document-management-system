@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('doc_type');
-            $table->jsonb('tags')->nullable();
+            $table->jsonb('tags');
             $table->string('approval_flow');
             $table->enum('visibility', ['public', 'private'])->default('public');
             $table->jsonb('files');

@@ -84,10 +84,13 @@ class DocumentController extends Controller
     }
 
     public function store(Request $request){
+        //dd($request->all());
         $config = Configuration::first();
         $request->validate([
             'title'     => 'required|string|max:255',
             'doc_type'  => 'required',
+            'tags'      => 'nullable|array',
+            'tags.*'    => 'string|max:50',
             'approval_flow'  => 'required',
             'files'     => 'required|array|max:' . $config->max_no_files,
             'files.*'   => 'file|max:' . ($config->max_file_size * 1024) . '|mimes:'.implode(',', $config->allowed_file_type)
@@ -98,18 +101,18 @@ class DocumentController extends Controller
             $paths[] = $file->store('uploads/uploadFiles', 'public');
         }
 
-        $data = UploadDocument::create([
+        UploadDocument::create([
             'title'         => $request->title,
             'description'   => $request->description,
             'doc_type'      => $request->doc_type,
             'approval_flow' => $request->approval_flow,
             'visibility'    => $request->visibility,
-            'tags'          => $request->has('tags') ? json_decode($request->tags, true): null,            
+            'tags'          => $request->tags,            
             'files'         => $paths,
             'user_id'       => auth()->id(),
         ]);
 
-        dd($data);
+        // dd($data);
 
         return response()->json(['status' => 'success']);
 

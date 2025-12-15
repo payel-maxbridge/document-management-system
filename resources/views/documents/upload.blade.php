@@ -55,7 +55,6 @@
                             <div class="form-group">
                                 <label for="docTags" class="form-label">Tags</label>
                                 <div class="tags-container" id="tagsContainer">
-                                    <!-- <input type="text" class="tags-input" id="docTags" name="tags[]" value="{{ old('tags')}}" placeholder="Add tags (press Enter)"> -->
                                     <input type="text" id="docTags" class="tags-input" placeholder="Add tags (press Enter)">
                                 </div>
                                 <small class="text-muted">Add relevant tags to help categorize and search documents</small>
@@ -197,25 +196,28 @@
 
                 function handleFiles(files) {
                     for (let file of files) {
-                        if (uploadedFiles.length >= conFig.maxFiles) {
-                            toastr.error(`Maximum ${conFig.maxFiles} files allowed`);
-                            return;
-                        }
-
                         const extension = file.name.split('.').pop().toLowerCase();
                         const sizeMB = file.size / 1024 / 1024; //KB then convert MB
 
-                        
+                        //max file check
+                        if (uploadedFiles.length >= conFig.maxFiles) {
+                            toastr.error(`Maximum ${conFig.maxFiles} files allowed`);
+                            continue;
+                        }
+
+                        //type check
                         if (!conFig.allowedTypes.includes(extension)) {
                             toastr.error(`.${extension} file type not allowed`);
                             continue;
                         }
 
+                        //size checks
                         if (sizeMB > conFig.maxFileSize) {
                             toastr.error(`File ${file.name} exceeds ${conFig.maxFileSize} MB`);
                             continue;
                         }
 
+                        //prevent duplicates
                         if (!uploadedFiles.find(f => f.name === file.name)) {
                             uploadedFiles.push(file);
                         }
@@ -253,7 +255,7 @@
                 const tagsInput = document.getElementById('docTags');
                 let tags = [];
 
-                tagsInput.addEventListener('keypress', (e) => {
+                tagsInput.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter') {
                         e.preventDefault();
                         const tag = tagsInput.value.trim();
@@ -295,56 +297,65 @@
                     e.preventDefault();
 
                     if(uploadedFiles.length === 0){
-                        toastr.error('Please upload atleast one file');
+                        toastr.error('Please upload at least one file');
                         return;
                     }
 
                     let formData = new FormData(this);
 
+                    // files
                     uploadedFiles.forEach(file => {
                         formData.append('files[]', file);
                     });
 
-                    formData.append('tags', JSON.stringify(tags));
+                    // ADD THIS BLOCK
+                    const pendingTag = tagsInput.value.trim();
+                    if (pendingTag && !tags.includes(pendingTag)) {
+                        tags.push(pendingTag);
+                        tagsInput.value = '';
+                    }
+
+                    // tags
+                    tags.forEach(tag => {
+                        formData.append('tags[]', tag);
+                    });
 
                     $('.btn-primary .normal-text').hide();
                     $('.btn-primary .spinner-border').show();
 
                     $.ajax({
-                        url: "{{route('uploadDocument.store')}}",
+                        url: "{{ route('uploadDocument.store') }}",
                         type: "POST",
                         data: formData,
                         contentType: false,
                         processData: false,
                         headers: {
-                            'X-CSRF-TOKEN': "{{ csrf_token() }}" //security
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
                         },
-                        success: function (res) {
+                        success: function () {
                             toastr.success('Document uploaded successfully');
-                            $('#uploadForm')[0].reset();
-                            uploadedFiles = [];
-                            tags = [];
-                            displayFiles();
-                            displayTags();
-                        },
 
-                        error: function (xhr) {
-                            if (xhr.status === 422) {
-                                Object.values(xhr.responseJSON.errors).forEach(err => {
-                                    toastr.error(err[0]);
+                            setTimeout(() => {
+                               windows.location.reload(); 
+                            }, 1000);
+                        },
+                        error: function(xhr){
+                            if(xhr.status === 422){
+                                let errors = xhr.responseJSON.errors;
+                                $.each(errors, function(key, value){
+                                    toastr.error(value);
                                 });
-                            } else {
-                                toastr.error('Upload failed. Please try again.');
+                            }else{
+                                toastr.error("Something went wrong, please try again");
                             }
                         },
-
                         complete: function () {
                             $('.btn-primary .normal-text').show();
                             $('.btn-primary .spinner-border').hide();
-                        }
-
-                    });       
+                        },
+                    });
                 });
+
                 
             </script>
         @endpush
