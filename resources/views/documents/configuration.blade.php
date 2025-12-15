@@ -33,7 +33,7 @@
 
                 <div class="form-group">
                     <label for="maxTotalSize" class="form-label">Maximum Total Size per Document (MB) <span style="color: #dc3545;">*</span></label>
-                    <input type="number" class="form-control" name="max_total_size" id="maxTotalSize" value="{{ $data->max_total_size }}" min="1" max="5000">
+                    <input type="number" class="form-control" name="max_total_size" id="maxTotalSize" value="{{ $data->max_total_size}}" min="1" max="5000">
                     <span class="form-text">Maximum total size for all files in a single document upload</span>
                 </div>
 

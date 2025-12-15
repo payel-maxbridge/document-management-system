@@ -37,7 +37,7 @@
                             </div>
 
                             <!-- Document Type -->
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label for="docType" class="form-label">Document Type <span style="color: #dc3545;">*</span></label>
                                 <select class="form-control" id="docType" required>
                                     <option value="">Select Document Type</option>
@@ -50,6 +50,20 @@
                                     <option value="report">Report</option>
                                     <option value="contract">Contract</option>
                                     <option value="other">Other</option>
+                                </select>
+                            </div> -->
+
+                            <div class="form-group">
+                                <label for="docType" class="form-label">
+                                    Document Type <span style="color: #dc3545;">*</span>
+                                </label>
+
+                                <select class="form-control" id="docType" name="doc_type" required>
+                                    <option value="">Select Document Type</option>
+
+                                    @foreach(document_types() as $label => $value)
+                                        <option value="{{ $value }}">{{ $label }}</option>
+                                    @endforeach
                                 </select>
                             </div>
 
@@ -68,14 +82,14 @@
                                 <div class="file-upload-area" id="fileUploadArea">
                                     <div class="file-upload-icon"><i class="bi bi-cloud-arrow-up"></i></div>
                                     <div class="file-upload-text">Drag and drop files here or click to browse</div>
-                                    <div class="file-upload-subtext">Supported formats: PDF, DOCX, XLSX, PPT, TXT, JPG, PNG</div>
+                                    <div class="file-upload-subtext">Supported formats: {{ strtoupper(implode(', ', $data->allowed_file_type ?? [])) }}</div>
                                 </div>
                                 <input type="file" id="fileInput" multiple>
                                 <div class="file-list" id="fileList"></div>
                             </div>
 
                             <!-- Approval Flow -->
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label for="approvalFlow" class="form-label">Approval Flow <span style="color: #dc3545;">*</span></label>
                                 <select class="form-control" id="approvalFlow" required>
                                     <option value="">Select Approval Flow</option>
@@ -86,6 +100,17 @@
                                     <option value="executive">Executive Approval</option>
                                 </select>
                                 <small class="text-muted">Select the approval workflow for this document</small>
+                            </div> -->
+                            <div class="form-group">
+                                <label for="approvalFlow" class="form-label">Approval Flow 
+                                    <span style="color: #dc3545;">*</span>
+                                </label>
+                                <select class="form-control" name="approval_flow" id="approvalFlow">
+                                    <option value="">Select Approval Flow</option>
+                                    @foreach(approval_flows() as $label => $value)
+                                        <option value="{{$value}}">{{$label}}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <!-- Visibility -->
