@@ -12,7 +12,8 @@ class UploadDocument extends Model
     public $fillable = ['title', 'description', 'doc_type', 'tags', 'approval_flow', 'visibility', 'files', 'user_id'];
 
     protected $casts = [
-        'tags' => 'array'
+        'tags' => 'array',
+        'files' => 'array'
     ];
 
     public function user() {

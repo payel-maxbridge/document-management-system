@@ -35,7 +35,8 @@ Route::middleware('auth')->group(function (){
     Route::post('/configuration/upload', [DocumentController::class, 'saveUploadSetting'])->name('configuration.upload.save');
     Route::post('/configuration/system', [DocumentController::class, 'saveSystemSetting'])->name('configuration.system.save');
     Route::post('/configuration/filetypes', [DocumentController::class, 'saveFileTypes'])->name('configuration.file.save');
-    Route::get('/upload-document', [DocumentController::class, 'upload'])->name('upload');
+    Route::get('/upload-document', [DocumentController::class, 'document'])->name('uploadDocument');
+    Route::post('/upload-document', [DocumentController::class, 'store'])->name('uploadDocument.store');
     Route::get('/document-explorer', [DocumentController::class, 'docExplorer'])->name('document-explorer');
     Route::get('/document-explorer/document-view', [DocumentController::class, 'docView'])->name('document-view');
     Route::get('/document-lifecycle', [DocumentController::class, 'docLifecycle'])->name('document-lifecycle');

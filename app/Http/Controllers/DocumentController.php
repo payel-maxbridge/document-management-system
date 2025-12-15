@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Configuration, FileConfiguration};
+use App\Models\{Configuration, FileConfiguration, UploadDocument};
 
 class DocumentController extends Controller
 {
@@ -78,9 +78,41 @@ class DocumentController extends Controller
         return response()->json(['status' => 'success']);
     }
 
-    public function upload(){
+    public function document(){
         $data = Configuration::first();
         return view ('documents.upload', compact('data'));
+    }
+
+    public function store(Request $request){
+        $config = Configuration::first();
+        $request->validate([
+            'title'     => 'required|string|max:255',
+            'doc_type'  => 'required',
+            'approval_flow'  => 'required',
+            'files'     => 'required|array|max:' . $config->max_no_files,
+            'files.*'   => 'file|max:' . ($config->max_file_size * 1024) . '|mimes:'.implode(',', $config->allowed_file_type)
+        ]);
+
+        $paths = [];
+        foreach($request->file('files') as $file){
+            $paths[] = $file->store('uploads/uploadFiles', 'public');
+        }
+
+        $data = UploadDocument::create([
+            'title'         => $request->title,
+            'description'   => $request->description,
+            'doc_type'      => $request->doc_type,
+            'approval_flow' => $request->approval_flow,
+            'visibility'    => $request->visibility,
+            'tags'          => $request->has('tags') ? json_decode($request->tags, true): null,            
+            'files'         => $paths,
+            'user_id'       => auth()->id(),
+        ]);
+
+        dd($data);
+
+        return response()->json(['status' => 'success']);
+
     }
 
     public function docExplorer(){

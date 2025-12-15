@@ -11,7 +11,7 @@
         <li><a href="{{ route('documents')}}" class="{{ request()->routeIs('documents') ? 'active' : ''}}">
             <i class="bi bi-cloud-upload"></i> Documents</a>
         </li>
-        <li><a href="{{ route('upload')}}" class="{{ request()->routeIs('upload') ? 'active' : ''}}">
+        <li><a href="{{ route('uploadDocument')}}" class="{{ request()->routeIs('uploadDocument') ? 'active' : ''}}">
             <i class="bi bi-cloud-upload"></i> Upload Document</a>
         </li>
         <li><a href="{{ route('approvals')}}" class="{{ request()->routeIs('approvals') ? 'active' : ''}}">

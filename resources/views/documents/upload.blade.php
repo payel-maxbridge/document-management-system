@@ -23,36 +23,20 @@
                         <h5 style="margin: 0;"><i class="bi bi-file-earmark-arrow-up"></i> Document Details</h5>
                     </div>
                     <div class="card-body">
-                        <form id="uploadForm">
+                        <form action="{{ route('uploadDocument.store')}}" method="post" id="uploadForm" enctype="multipart/form-data">
                             <!-- Document Title -->
                             <div class="form-group">
                                 <label for="docTitle" class="form-label">Document Title <span style="color: #dc3545;">*</span></label>
-                                <input type="text" class="form-control" id="docTitle" placeholder="Enter document title" required>
+                                <input type="text" class="form-control" id="docTitle" name="title" placeholder="Enter document title" value="{{ old('title')}}" required>
                             </div>
 
                             <!-- Document Description -->
                             <div class="form-group">
                                 <label for="docDescription" class="form-label">Description</label>
-                                <textarea class="form-control" id="docDescription" placeholder="Enter document description (optional)"></textarea>
+                                <textarea class="form-control" id="docDescription" name="description" value="{{ old('description')}}" placeholder="Enter document description (optional)"></textarea>
                             </div>
 
                             <!-- Document Type -->
-                            <!-- <div class="form-group">
-                                <label for="docType" class="form-label">Document Type <span style="color: #dc3545;">*</span></label>
-                                <select class="form-control" id="docType" required>
-                                    <option value="">Select Document Type</option>
-                                    <option value="financial">Financial</option>
-                                    <option value="project">Project</option>
-                                    <option value="hr">HR</option>
-                                    <option value="compliance">Compliance</option>
-                                    <option value="budget">Budget</option>
-                                    <option value="policy">Policy</option>
-                                    <option value="report">Report</option>
-                                    <option value="contract">Contract</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div> -->
-
                             <div class="form-group">
                                 <label for="docType" class="form-label">
                                     Document Type <span style="color: #dc3545;">*</span>
@@ -71,7 +55,8 @@
                             <div class="form-group">
                                 <label for="docTags" class="form-label">Tags</label>
                                 <div class="tags-container" id="tagsContainer">
-                                    <input type="text" class="tags-input" id="docTags" placeholder="Add tags (press Enter)">
+                                    <!-- <input type="text" class="tags-input" id="docTags" name="tags[]" value="{{ old('tags')}}" placeholder="Add tags (press Enter)"> -->
+                                    <input type="text" id="docTags" class="tags-input" placeholder="Add tags (press Enter)">
                                 </div>
                                 <small class="text-muted">Add relevant tags to help categorize and search documents</small>
                             </div>
@@ -84,23 +69,11 @@
                                     <div class="file-upload-text">Drag and drop files here or click to browse</div>
                                     <div class="file-upload-subtext">Supported formats: {{ strtoupper(implode(', ', $data->allowed_file_type ?? [])) }}</div>
                                 </div>
-                                <input type="file" id="fileInput" multiple>
+                                <input type="file" id="fileInput" name="file" multiple>
                                 <div class="file-list" id="fileList"></div>
                             </div>
 
                             <!-- Approval Flow -->
-                            <!-- <div class="form-group">
-                                <label for="approvalFlow" class="form-label">Approval Flow <span style="color: #dc3545;">*</span></label>
-                                <select class="form-control" id="approvalFlow" required>
-                                    <option value="">Select Approval Flow</option>
-                                    <option value="standard">Standard Approval</option>
-                                    <option value="financial">Financial Review</option>
-                                    <option value="compliance">Compliance Review</option>
-                                    <option value="hr">HR Review</option>
-                                    <option value="executive">Executive Approval</option>
-                                </select>
-                                <small class="text-muted">Select the approval workflow for this document</small>
-                            </div> -->
                             <div class="form-group">
                                 <label for="approvalFlow" class="form-label">Approval Flow 
                                     <span style="color: #dc3545;">*</span>
@@ -130,10 +103,26 @@
 
                             <!-- Action Buttons -->
                             <div class="button-group">
-                                <button type="submit" class="btn-primary"><i class="bi bi-cloud-upload"></i> Upload Document</button>
-                                <button type="reset" class="btn-secondary"><i class="bi bi-arrow-counterclockwise"></i> Clear Form</button>
-                                <a href="documents.html" class="btn-secondary"><i class="bi bi-x-circle"></i> Cancel</a>
+                                <button type="submit" class="btn-primary" id="uploadBtn">
+                                    <span class="normal-text">
+                                        <i class="bi bi-cloud-upload"></i> Upload Document
+                                    </span>
+
+                                    <span class="loading-text" style="display:none;">
+                                        <span class="spinner-border spinner-border-sm me-1"></span>
+                                        Uploading...
+                                    </span>
+                                </button>
+
+                                <button type="reset" class="btn-secondary">
+                                    <i class="bi bi-arrow-counterclockwise"></i> Clear Form
+                                </button>
+
+                                <a href="{{ route('uploadDocument') }}" class="btn-secondary">
+                                    <i class="bi bi-x-circle"></i> Cancel
+                                </a>
                             </div>
+
                         </form>
                     </div>
                 </div>
@@ -171,109 +160,192 @@
             </div>
         </div>
 
-    
-    <script>
-        // File Upload Handling
-        const fileUploadArea = document.getElementById('fileUploadArea');
-        const fileInput = document.getElementById('fileInput');
-        const fileList = document.getElementById('fileList');
-        let uploadedFiles = [];
+        @push('scripts')
+            <script>
 
-        fileUploadArea.addEventListener('click', () => fileInput.click());
-
-        fileUploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            fileUploadArea.classList.add('drag-over');
-        });
-
-        fileUploadArea.addEventListener('dragleave', () => {
-            fileUploadArea.classList.remove('drag-over');
-        });
-
-        fileUploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            fileUploadArea.classList.remove('drag-over');
-            handleFiles(e.dataTransfer.files);
-        });
-
-        fileInput.addEventListener('change', (e) => {
-            handleFiles(e.target.files);
-        });
-
-        function handleFiles(files) {
-            for (let file of files) {
-                if (!uploadedFiles.find(f => f.name === file.name)) {
-                    uploadedFiles.push(file);
+                const conFig = {
+                    maxFileSize : {{ $data->max_file_size}},
+                    maxFiles : {{ $data->max_no_files}},
+                    allowedTypes : @json($data->allowed_file_type ?? []),
                 }
-            }
-            displayFiles();
-        }
+                // File Upload Handling
+                const fileUploadArea = document.getElementById('fileUploadArea');
+                const fileInput = document.getElementById('fileInput');
+                const fileList = document.getElementById('fileList');
+                let uploadedFiles = [];
 
-        function displayFiles() {
-            fileList.innerHTML = '';
-            uploadedFiles.forEach((file, index) => {
-                const fileItem = document.createElement('div');
-                fileItem.className = 'file-item';
-                fileItem.innerHTML = `
-                    <div class="file-item-info">
-                        <div class="file-item-icon"><i class="bi bi-file"></i></div>
-                        <div class="file-item-details">
-                            <div class="file-item-name">${file.name}</div>
-                            <div class="file-item-size">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
-                        </div>
-                    </div>
-                    <button type="button" class="file-item-remove" onclick="removeFile(${index})"><i class="bi bi-trash"></i></button>
-                `;
-                fileList.appendChild(fileItem);
-            });
-        }
+                fileUploadArea.addEventListener('click', () => fileInput.click());
 
-        function removeFile(index) {
-            uploadedFiles.splice(index, 1);
-            displayFiles();
-        }
+                fileUploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    fileUploadArea.classList.add('drag-over');
+                });
 
-        // Tags Handling
-        const tagsContainer = document.getElementById('tagsContainer');
-        const tagsInput = document.getElementById('docTags');
-        let tags = [];
+                fileUploadArea.addEventListener('dragleave', () => {
+                    fileUploadArea.classList.remove('drag-over');
+                });
 
-        tagsInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                const tag = tagsInput.value.trim();
-                if (tag && !tags.includes(tag)) {
-                    tags.push(tag);
-                    tagsInput.value = '';
+                fileUploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    fileUploadArea.classList.remove('drag-over');
+                    handleFiles(e.dataTransfer.files);
+                });
+
+                fileInput.addEventListener('change', (e) => {
+                    handleFiles(e.target.files);
+                });
+
+                function handleFiles(files) {
+                    for (let file of files) {
+                        if (uploadedFiles.length >= conFig.maxFiles) {
+                            toastr.error(`Maximum ${conFig.maxFiles} files allowed`);
+                            return;
+                        }
+
+                        const extension = file.name.split('.').pop().toLowerCase();
+                        const sizeMB = file.size / 1024 / 1024; //KB then convert MB
+
+                        
+                        if (!conFig.allowedTypes.includes(extension)) {
+                            toastr.error(`.${extension} file type not allowed`);
+                            continue;
+                        }
+
+                        if (sizeMB > conFig.maxFileSize) {
+                            toastr.error(`File ${file.name} exceeds ${conFig.maxFileSize} MB`);
+                            continue;
+                        }
+
+                        if (!uploadedFiles.find(f => f.name === file.name)) {
+                            uploadedFiles.push(file);
+                        }
+
+                    }
+                    displayFiles();
+                }
+
+                function displayFiles() {
+                    fileList.innerHTML = '';
+                    uploadedFiles.forEach((file, index) => {
+                        const fileItem = document.createElement('div');
+                        fileItem.className = 'file-item';
+                        fileItem.innerHTML = `
+                            <div class="file-item-info">
+                                <div class="file-item-icon"><i class="bi bi-file"></i></div>
+                                <div class="file-item-details">
+                                    <div class="file-item-name">${file.name}</div>
+                                    <div class="file-item-size">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+                                </div>
+                            </div>
+                            <button type="button" class="file-item-remove" onclick="removeFile(${index})"><i class="bi bi-trash"></i></button>
+                        `;
+                        fileList.appendChild(fileItem);
+                    });
+                }
+
+                function removeFile(index) {
+                    uploadedFiles.splice(index, 1);
+                    displayFiles();
+                }
+
+                // Tags Handling
+                const tagsContainer = document.getElementById('tagsContainer');
+                const tagsInput = document.getElementById('docTags');
+                let tags = [];
+
+                tagsInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const tag = tagsInput.value.trim();
+                        if (tag && !tags.includes(tag)) {
+                            tags.push(tag);
+                            tagsInput.value = '';
+                            displayTags();
+                        }
+                    }
+                });
+
+                function displayTags() {
+                    const tagItems = document.querySelectorAll('.tag-item');
+                    tagItems.forEach(item => item.remove());
+
+                    tags.forEach((tag, index) => {
+                        const tagItem = document.createElement('div');
+                        tagItem.className = 'tag-item';
+                        tagItem.innerHTML = `
+                            ${tag}
+                            <button type="button" onclick="removeTag(${index})">×</button>
+                        `;
+                        tagsContainer.insertBefore(tagItem, tagsInput);
+                    });
+                }
+
+                function removeTag(index) {
+                    tags.splice(index, 1);
                     displayTags();
                 }
-            }
-        });
 
-        function displayTags() {
-            const tagItems = document.querySelectorAll('.tag-item');
-            tagItems.forEach(item => item.remove());
+                // Form Submission
+                // document.getElementById('uploadForm').addEventListener('submit', (e) => {
+                //     e.preventDefault();
+                //     alert('Document uploaded successfully! (This is a prototype)');
+                // });
 
-            tags.forEach((tag, index) => {
-                const tagItem = document.createElement('div');
-                tagItem.className = 'tag-item';
-                tagItem.innerHTML = `
-                    ${tag}
-                    <button type="button" onclick="removeTag(${index})">×</button>
-                `;
-                tagsContainer.insertBefore(tagItem, tagsInput);
-            });
-        }
+                $('#uploadForm').on('submit', function(e){
+                    e.preventDefault();
 
-        function removeTag(index) {
-            tags.splice(index, 1);
-            displayTags();
-        }
+                    if(uploadedFiles.length === 0){
+                        toastr.error('Please upload atleast one file');
+                        return;
+                    }
 
-        // Form Submission
-        document.getElementById('uploadForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Document uploaded successfully! (This is a prototype)');
-        });
-    </script>
+                    let formData = new FormData(this);
+
+                    uploadedFiles.forEach(file => {
+                        formData.append('files[]', file);
+                    });
+
+                    formData.append('tags', JSON.stringify(tags));
+
+                    $('.btn-primary .normal-text').hide();
+                    $('.btn-primary .spinner-border').show();
+
+                    $.ajax({
+                        url: "{{route('uploadDocument.store')}}",
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        headers: {
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}" //security
+                        },
+                        success: function (res) {
+                            toastr.success('Document uploaded successfully');
+                            $('#uploadForm')[0].reset();
+                            uploadedFiles = [];
+                            tags = [];
+                            displayFiles();
+                            displayTags();
+                        },
+
+                        error: function (xhr) {
+                            if (xhr.status === 422) {
+                                Object.values(xhr.responseJSON.errors).forEach(err => {
+                                    toastr.error(err[0]);
+                                });
+                            } else {
+                                toastr.error('Upload failed. Please try again.');
+                            }
+                        },
+
+                        complete: function () {
+                            $('.btn-primary .normal-text').show();
+                            $('.btn-primary .spinner-border').hide();
+                        }
+
+                    });       
+                });
+                
+            </script>
+        @endpush
 @endsection
