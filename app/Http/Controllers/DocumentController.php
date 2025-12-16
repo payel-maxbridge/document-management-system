@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Configuration, FileConfiguration, UploadDocument};
+use App\Models\{Configuration, FileConfiguration, UploadDocument, UploadDocFile};
 
 class DocumentController extends Controller
 {
@@ -46,14 +46,6 @@ class DocumentController extends Controller
 
         $uploadsettings->save();
 
-
-    $uploadsettings->update([
-        'max_file_size'  => $request->max_file_size,
-        'max_total_size' => $request->max_total_size,
-        'max_no_files'   => $request->max_no_files,
-        'virus_scanning' => $request->has('virus_scanning'),
-    ]);
-
         return response()->json(['status' => 'success']);
     }   
 
@@ -95,12 +87,12 @@ class DocumentController extends Controller
 
     //upload document page
 
-    public function document(){
+    public function uploadDocumentIndex(){
         $data = Configuration::first();
         return view ('documents.upload', compact('data'));
     }
 
-    public function store(Request $request){
+    public function uploadDocumentStore(Request $request){
         //dd($request->all());
         $config = Configuration::first();
         $request->validate([
@@ -113,25 +105,31 @@ class DocumentController extends Controller
             'files.*'   => 'file|max:' . ($config->max_file_size * 1024) . '|mimes:'.implode(',', $config->allowed_file_type)
         ]);
 
-        $paths = [];
-        foreach($request->file('files') as $file){
-            $paths[] = $file->store('uploads/uploadFiles', 'public');
-        }
-
-        UploadDocument::create([
+        $document = UploadDocument::create([
             'title'         => $request->title,
             'description'   => $request->description,
             'doc_type'      => $request->doc_type,
             'approval_flow' => $request->approval_flow,
             'visibility'    => $request->visibility,
-            'tags'          => $request->tags,            
-            'files'         => $paths,
+            'tags'          => $request->tags ?? [],            
             'user_id'       => auth()->id(),
         ]);
 
-        // dd($data);
+        foreach($request->file('files') as $file) {
+            $path = upload_file($file);
+            //dd($path);
+            UploadDocFile::create([
+                'user_id'   => auth()->id(),
+                'upload_doc_id' => $document->id,
+                'doc_type'  => $request->doc_type,
+                'doc_tags'  => $request->tags ?? [],
+                'file_path' => $path,
+                'file_type' => $file->getMimeType()
+            ]);
 
-        return response()->json(['status' => 'success']);
+        }
+
+        return response()->json(['status' => 'success', 'message' => 'Document uploaded successfully']);
 
     }
 

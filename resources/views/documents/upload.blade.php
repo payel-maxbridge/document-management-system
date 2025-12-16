@@ -68,7 +68,7 @@
                                     <div class="file-upload-text">Drag and drop files here or click to browse</div>
                                     <div class="file-upload-subtext">Supported formats: {{ strtoupper(implode(', ', $data->allowed_file_type ?? [])) }}</div>
                                 </div>
-                                <input type="file" id="fileInput" name="file" multiple>
+                                <input type="file" id="fileInput" multiple>
                                 <div class="file-list" id="fileList"></div>
                             </div>
 
@@ -248,6 +248,7 @@
                 function removeFile(index) {
                     uploadedFiles.splice(index, 1);
                     displayFiles();
+                    fileInput.value = '';
                 }
 
                 // Tags Handling
@@ -288,10 +289,6 @@
                 }
 
                 // Form Submission
-                // document.getElementById('uploadForm').addEventListener('submit', (e) => {
-                //     e.preventDefault();
-                //     alert('Document uploaded successfully! (This is a prototype)');
-                // });
 
                 $('#uploadForm').on('submit', function(e){
                     e.preventDefault();
@@ -303,25 +300,20 @@
 
                     let formData = new FormData(this);
 
-                    // files
+                    //  ADD FILES MANUALLY
                     uploadedFiles.forEach(file => {
                         formData.append('files[]', file);
                     });
 
-                    // ADD THIS BLOCK
+                    // tags
                     const pendingTag = tagsInput.value.trim();
                     if (pendingTag && !tags.includes(pendingTag)) {
                         tags.push(pendingTag);
-                        tagsInput.value = '';
                     }
 
-                    // tags
                     tags.forEach(tag => {
                         formData.append('tags[]', tag);
                     });
-
-                    $('.btn-primary .normal-text').hide();
-                    $('.btn-primary .spinner-border').show();
 
                     $.ajax({
                         url: "{{ route('uploadDocument.store') }}",
@@ -335,8 +327,12 @@
                         success: function () {
                             toastr.success('Document uploaded successfully');
 
+                            uploadedFiles = [];
+                            fileInput.value = '';   
+                            fileList.innerHTML = '';
+                            
                             setTimeout(() => {
-                               windows.location.reload(); 
+                            window.location.reload(); 
                             }, 1000);
                         },
                         error: function(xhr){
@@ -352,11 +348,10 @@
                         complete: function () {
                             $('.btn-primary .normal-text').show();
                             $('.btn-primary .spinner-border').hide();
-                        },
+                        },                  
                     });
                 });
-
-                
+     
             </script>
         @endpush
 @endsection

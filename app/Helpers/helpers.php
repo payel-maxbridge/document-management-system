@@ -29,4 +29,14 @@ if (!function_exists('approval_flows')) {
     }
 }
 
+if (!function_exists('upload_file')) {
+    function upload_file($file, $folder = 'upload/uploadfiles')
+    {
+        $extension = $file->getClientOriginalExtension();
+        $fileName  = time() . '_' . Str::random(10) . '.' . $extension;
+
+        return $file->storeAs($folder, $fileName, 'public');
+    }
+}
+
 ?>
