@@ -10,7 +10,7 @@ class Configuration extends Model
     public $table = "configurations";
     public $fillable = [
         'max_file_size', 'max_total_size', 'max_no_files', 'virus_scanning', 'allowed_file_type', 'app_name', 'support_email',
-        'email_notification', 'document_versioning', 'retention_days'
+        'email_notification', 'document_versioning', 'retention_days', 'user_id'
     ];
 
     protected $casts =[

@@ -59,7 +59,7 @@
             <div class="card-header">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <h5 style="margin: 0;"><i class="bi bi-list"></i> All Documents (24)</h5>
-                    <a href="upload.html" class="btn-primary"><i class="bi bi-cloud-upload"></i> Upload New</a>
+                    <a href="{{route('uploadDocument')}}" class="btn-primary"><i class="bi bi-cloud-upload"></i> Upload New</a>
                 </div>
             </div>
             <div class="card-body">

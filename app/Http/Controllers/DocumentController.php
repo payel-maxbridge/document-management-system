@@ -16,6 +16,12 @@ class DocumentController extends Controller
 
     public function index(){
         $data = Configuration::first();
+
+        if(!$data){
+            $data = Configuration::create([
+                'user_id' => auth()->id()
+            ]);
+        }
         $fileType = FileConfiguration::fileType();
         return view('documents.configuration', compact('data', 'fileType'));
     }
@@ -36,8 +42,17 @@ class DocumentController extends Controller
         $uploadsettings->max_total_size = $request->max_total_size;
         $uploadsettings->max_no_files   = $request->max_no_files;
         $uploadsettings->virus_scanning = $request->has('virus_scanning') ? 1 : 0;
+        $uploadsettings->user_id = auth()->id();
 
         $uploadsettings->save();
+
+
+    $uploadsettings->update([
+        'max_file_size'  => $request->max_file_size,
+        'max_total_size' => $request->max_total_size,
+        'max_no_files'   => $request->max_no_files,
+        'virus_scanning' => $request->has('virus_scanning'),
+    ]);
 
         return response()->json(['status' => 'success']);
     }   
@@ -59,6 +74,7 @@ class DocumentController extends Controller
        $systemsetting->email_notification   = $request->has('email_notification') ? 1 : 0;
        $systemsetting->document_versioning  = $request->has('document_versioning') ? 1 : 0;
        $systemsetting->retention_days   = $request->retention_days;
+       $systemsetting->user_id = auth()->id();
 
        $systemsetting->save();
 
@@ -74,9 +90,10 @@ class DocumentController extends Controller
             ['allowed_file_type' => $request->allowed_file_type]
         );
         
-
         return response()->json(['status' => 'success']);
     }
+
+    //upload document page
 
     public function document(){
         $data = Configuration::first();

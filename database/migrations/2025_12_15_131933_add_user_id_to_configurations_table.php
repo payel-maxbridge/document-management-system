@@ -12,11 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('configurations', function (Blueprint $table) {
-            //
-            $table->foreignId('user_id')->after('id')->default(1)->constrained()->onDelete('cascade');
+            //  
+            $table->unsignedBigInteger('user_id')->nullable()->after('id');   
         });
         
+        DB::table('configurations')->update([
+            'user_id' => 1
+        ]);
+
+        Schema::table('configurations', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('users') ->onDelete('cascade');            
+        });
+           
     }
+    
 
     /**
      * Reverse the migrations.
